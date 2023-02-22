@@ -1,11 +1,11 @@
 #%%
+
 import requests
 
-response = requests.post("http://localhost:8080/users", json={
-    "username": "other",
-    "email": "potato@hello.com",
-    "password": "p0t4t0"
-})
+users = requests.get("http://localhost:8080/users").json()
 
-print(response.text)
+for user in users:
+    print(user["email"])
+
+
 # %%
