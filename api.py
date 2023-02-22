@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from sqlalchemy import create_engine
 from sqlalchemy.engine.row import RowMapping
 
@@ -41,6 +41,24 @@ def get_user(user_id):
         user = result.mappings().one()
 
         return jsonify(to_dict(user))
+
+@app.route("/users", methods=["POST"])
+def create_user():
+    user = request.get_json()
+
+    query = f"""
+    INSERT INTO users (username, email, password)
+    VALUES (
+        '{user["username"]}',
+        '{user["email"]}',
+        '{user["password"]}'
+    )
+    """
+
+    with engine.connect() as connection:
+        connection.execute(query)
+
+        return jsonify(user), 201
 
         
 
